@@ -1,0 +1,147 @@
+var createScene = function () {
+    var scene = new BABYLON.Scene(engine);
+
+    // This creates and positions a free camera (non-mesh)
+    // var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.setPosition(new BABYLON.Vector3(0, 0, 10));
+    // This targets the camera to scene origin
+    // camera.setTarget(BABYLON.Vector3.Zero());
+
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+    const width = 0.5; // Width of the plane
+    const height = 2;
+    // Our built-in 'sphere' shape.
+    const faceColors = new Array(6);
+
+    faceColors[1] = new BABYLON.Color4(1, 0, 0, 1);
+    var cube = BABYLON.MeshBuilder.CreateBox("sphere", { width, height,faceColors: faceColors }, scene);
+    cube.position = new BABYLON.Vector3(0 ,1);
+    //// cube texture
+    const windowMaterial = new BABYLON.StandardMaterial("windowMaterial", scene);
+    windowMaterial.diffuseTexture = new BABYLON.Texture("https://www.babylonjs-playground.com/textures/floor.png", scene);
+
+    // Assuming you want to add windows to the front face of the cube
+    const frontFaceSubMesh = cube.subMeshes[0]; // Adjust the sub-mesh index if needed
+
+    // Assign the window material to the front face
+    frontFaceSubMesh.material = windowMaterial;
+
+    // Move the sphere upward 1/2 its height
+    // cube.position.y = 1;
+    const width1 = 0.01; // Width of the plane
+    const height1 = 0.5;
+    var fence1 = BABYLON.MeshBuilder.CreateBox("box", { width:width1, height: height1 ,  depth:2}, scene);
+    fence1.position = new BABYLON.Vector3(0.7 ,0.25, -0.3);
+
+    var fence2 = BABYLON.MeshBuilder.CreateBox("box", { width:width1, height: height1 ,  depth:2}, scene);
+    fence2.position = new BABYLON.Vector3(-0.7 ,0.25, -0.3);
+
+    var fence3 = BABYLON.MeshBuilder.CreateBox("box", { width:1.4, height: height1 ,  depth:width1}, scene);
+    fence3.position = new BABYLON.Vector3(0 ,0.25, 0.7);
+    
+    var fence4 = BABYLON.MeshBuilder.CreateBox("box", { width:1.4, height: height1 ,  depth:width1}, scene);
+    fence4.position = new BABYLON.Vector3(0 ,0.25, -1.3);
+
+    //sa2f
+    const vertices = [
+    new BABYLON.Vector3(-0.25, 2, -0.5), // Vertex 0
+    new BABYLON.Vector3(0.25, 2, -0.5),  // Vertex 1
+    new BABYLON.Vector3(0.25, 2, 0.5),   // Vertex 2
+    new BABYLON.Vector3(-0.25, 2, 0.5),  // Vertex 3
+    new BABYLON.Vector3(0, 2.5, 0)    // Vertex 4 (apex)
+];
+
+// Define the faces of the square pyramid using vertex indices
+const indices = [
+    0, 1, 2, // Base triangle 1
+    0, 2, 3, // Base triangle 2
+    0, 1, 4, // Side triangle 1
+    1, 2, 4, // Side triangle 2
+    2, 3, 4, // Side triangle 3
+    3, 0, 4  // Side triangle 4
+];
+
+// Create a vertex data object
+const vertexData = new BABYLON.VertexData();
+
+// Assign the vertices and indices to the vertex data object
+vertexData.positions = vertices.flatMap(v => [v.x, v.y, v.z]);
+vertexData.indices = indices;
+
+// Create a custom material for the pyramid
+const materials = new BABYLON.StandardMaterial("pyramidMaterial", scene);
+materials.diffuseColor = new BABYLON.Color3(1, 0.5, 0); // Red color
+
+// Create a mesh using the vertex data and material
+const pyramid = new BABYLON.Mesh("pyramid", scene);
+vertexData.applyToMesh(pyramid);
+const materialBuilding = new BABYLON.StandardMaterial("whiteMaterial", scene);
+
+// Set the material's diffuse color to white
+materialBuilding.diffuseColor = new BABYLON.Color3(1, 0.9529411764705882, 0.807843137254902);
+pyramid.material = materials;
+
+var fence  = new BABYLON.Mesh("fence", scene);
+    fence1.parent=fence;
+    fence2.parent=fence;
+    fence3.parent=fence;
+    fence4.parent=fence;
+fence1.material = materialBuilding;
+fence2.material = materialBuilding;
+fence3.material = materialBuilding;
+fence4.material = materialBuilding;
+
+var building = new BABYLON.Mesh("building", scene);
+    cube.parent = building;
+    pyramid.parent = building;
+    fence.parent=building;
+    // fence2.parent=building;
+    // fence3.parent=building;
+    // fence4.parent=building;
+    const buildingMaterial = new BABYLON.StandardMaterial("test", scene);
+
+    // buildingMaterial.ambientColor = new BABYLON.Color4(1, 0.01, 0.01)
+
+building.material= materialBuilding;
+    // building.position = new BABYLON.Vector3(1 ,1);
+/////hove functions to select building
+    building.actionManager = new BABYLON.ActionManager(scene);
+    building.actionManager.isRecursive = true;
+    building.actionManager.registerAction(
+        new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPointerOverTrigger,
+            function () {
+                // Change the material color of the pyramid on hover
+                building.material.diffuseColor = new BABYLON.Color3(1, 0, 0);
+                pyramid.material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Yellow color (or any other color)
+            }
+        )
+    );
+
+    // Restore the original color when the pointer moves away from the pyramid
+    building.actionManager.registerAction(
+        new BABYLON.ExecuteCodeAction(
+            BABYLON.ActionManager.OnPointerOutTrigger,
+            function () {
+                // Restore the original material color of the pyramid
+                building.material.diffuseColor = new BABYLON.Color3(1, 0.9529411764705882, 0.807843137254902);
+                pyramid.material.diffuseColor = new BABYLON.Color3(1, 0.5, 0); // Red color
+            }
+        )
+    );
+    // Our built-in 'ground' shape.
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 16, height: 16}, scene);
+
+// //////
+
+    return scene;
+// };
+};
