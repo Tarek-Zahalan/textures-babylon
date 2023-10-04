@@ -1,13 +1,8 @@
 var createScene = function () {
     var scene = new BABYLON.Scene(engine);
 
-    // This creates and positions a free camera (non-mesh)
-    // var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
-var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
-camera.setPosition(new BABYLON.Vector3(0, 0, 10));
-    // This targets the camera to scene origin
-    // camera.setTarget(BABYLON.Vector3.Zero());
-
+    var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.setPosition(new BABYLON.Vector3(0, 0, 10));
     // This attaches the camera to the canvas
     camera.attachControl(canvas, true);
 
@@ -18,9 +13,17 @@ camera.setPosition(new BABYLON.Vector3(0, 0, 10));
     light.intensity = 0.7;
     const width = 0.5; // Width of the plane
     const height = 2;
-    // Our built-in 'sphere' shape.
+
+    ////cube texture
+    var cubeTexture = new BABYLON.Texture("https://raw.githubusercontent.com/Tarek-Zahalan/textures-babylon/master/assets/window2.jpg", scene);
+    var cubeTextureMaterial = new BABYLON.StandardMaterial("windows", scene);
+    cubeTextureMaterial.diffuseTexture = cubeTexture;
+    cubeTextureMaterial.diffuseTexture.uScale = 4; // Horizontal scaling
+    cubeTextureMaterial.diffuseTexture.vScale = 4;
+
     var cube = BABYLON.MeshBuilder.CreateBox("sphere", { width, height }, scene);
     cube.position = new BABYLON.Vector3(0 ,1);
+    cube.material = cubeTextureMaterial;
     // Move the sphere upward 1/2 its height
     // cube.position.y = 1;
     const width1 = 0.01; // Width of the plane
@@ -75,7 +78,7 @@ const materialBuilding = new BABYLON.StandardMaterial("whiteMaterial", scene);
 // Set the material's diffuse color to white
 materialBuilding.diffuseColor = new BABYLON.Color3(1, 0.9529411764705882, 0.807843137254902);
 pyramid.material = materials;
-cube.material=materialBuilding;
+// cube.material=materialBuilding;
 
 var fence  = new BABYLON.Mesh("fence", scene);
     fence1.parent=fence;
