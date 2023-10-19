@@ -1,0 +1,46 @@
+var createScene = function () {
+    var scene = new BABYLON.Scene(engine);
+
+    var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.setPosition(new BABYLON.Vector3(0, 0, 10));
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+    
+    // scalling
+    const depthScale = 2;
+    const widthScale = 2.5;
+    const heightScale = 2;
+
+    const ahLeftWidth = 1; // Width of the plane
+    const aharonianHeight = 2;
+    const ahCenterDepth = 0.7
+
+    var material = new BABYLON.StandardMaterial("cubeMaterial", scene);
+    material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red color (R, G, B values)
+    var materialTest = new BABYLON.StandardMaterial("cubeMaterial", scene);
+    materialTest.diffuseColor = new BABYLON.Color3(229 / 255, 173 / 255, 88 / 255);
+
+    var corners = [ new BABYLON.Vector2(4, -4),
+                    new BABYLON.Vector2(0, -4),
+                    new BABYLON.Vector2(0, -8),
+                    
+                    new BABYLON.Vector2(4, -8),
+              ];
+          
+    var poly_tri = new BABYLON.PolygonMeshBuilder("polytri", corners, scene);
+    var polygon = poly_tri.build(null, 1.5);
+    polygon.position.y = + 4;
+    
+    
+    // Our built-in 'ground' shape.
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 16, height: 16}, scene);
+
+
+    return scene;
+};
