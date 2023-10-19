@@ -28,16 +28,17 @@ var createScene = function () {
 
     var corners = [ new BABYLON.Vector2(4, -4),
                     new BABYLON.Vector2(0, -3.5),
-                    new BABYLON.Vector2(-.20, -6),
-                    new BABYLON.Vector2(-0.40, -6),
-                    new BABYLON.Vector2(-0.60, -8),
-                    new BABYLON.Vector2(3.7, -8.7),
+                    new BABYLON.Vector2(-0.30, -6),
+                    new BABYLON.Vector2(-0.45, -6),
+                    new BABYLON.Vector2(-0.65, -8),
+                    new BABYLON.Vector2(3.6, -8.5),
               ];
           
     var poly_tri = new BABYLON.PolygonMeshBuilder("polytri", corners, scene);
     var polygon = poly_tri.build(null, 1.5);
+    polygon.material=material;
     polygon.position.y = + 4;
-    
+    polygon.position.x = - 2;
     
     // Our built-in 'ground' shape.
     var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 16, height: 16}, scene);
