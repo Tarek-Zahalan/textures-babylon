@@ -1,0 +1,58 @@
+//write all values to be between 0 and 1 and multiplied by the scale.
+var createScene = function () {
+    var scene = new BABYLON.Scene(engine);
+
+    var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.setPosition(new BABYLON.Vector3(0, 0, 10));
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+    
+    // scalling
+    const depthScale = 2;
+    const widthScale = 2.5;
+    const heightScale = 2;
+    const Scale = 50;
+
+    const ahLeftWidth = 1; // Width of the plane
+    const aharonianHeight = 2;
+    const ahCenterDepth = 0.7
+
+    var material = new BABYLON.StandardMaterial("cubeMaterial", scene);
+    material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red color (R, G, B values)
+    var materialTest = new BABYLON.StandardMaterial("cubeMaterial", scene);
+    materialTest.diffuseColor = new BABYLON.Color3(229 / 255, 173 / 255, 88 / 255);
+
+    var corners = [
+    new BABYLON.Vector2(0.04*Scale, 0.00*Scale),
+    new BABYLON.Vector2(0.00*Scale, 0.002*Scale),
+    new BABYLON.Vector2(0.00*Scale, -0.05*Scale),
+    new BABYLON.Vector2(0.01*Scale, -0.052*Scale),
+    new BABYLON.Vector2(0.01*Scale, -0.12*Scale),
+    new BABYLON.Vector2(0.00*Scale, -0.12*Scale),
+    new BABYLON.Vector2(0.00*Scale, -0.16*Scale),
+    new BABYLON.Vector2(0.04*Scale, -0.16*Scale),
+    new BABYLON.Vector2(0.04*Scale, -0.06*Scale),
+    new BABYLON.Vector2(0.035*Scale, -0.058*Scale),
+    new BABYLON.Vector2(0.035*Scale, -0.04*Scale),
+    new BABYLON.Vector2(0.04*Scale, -0.04*Scale),
+];
+          
+    var mehagian_tri = new BABYLON.PolygonMeshBuilder("mehagiantri", corners, scene);
+    var mehagian = mehagian_tri.build(null, 0.015*Scale);
+    mehagian.material=material;
+    mehagian.position.y = 1.5;
+    mehagian.position.x = - 2;
+    mehagian.position.z = + 2;
+    
+    // Our built-in 'ground' shape.
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 16, height: 16}, scene);
+
+
+    return scene;
+};
