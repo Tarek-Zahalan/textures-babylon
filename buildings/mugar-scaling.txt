@@ -1,0 +1,41 @@
+var Scale = 100; // Set your desired scale value
+
+var createScene = function () {
+    var scene = new BABYLON.Scene(engine);
+
+    var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.setPosition(new BABYLON.Vector3(0, 0, 10));
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+
+    var material = new BABYLON.StandardMaterial("cubeMaterial", scene);
+    material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red color (R, G, B values)
+    var materialTest = new BABYLON.StandardMaterial("cubeMaterial", scene);
+    materialTest.diffuseColor = new BABYLON.Color3(229 / 255, 173 / 255, 88 / 255);
+
+    var Mugar_corners = [ 
+        new BABYLON.Vector2(0.04 * Scale , -0.04 * Scale ),
+        new BABYLON.Vector2(0, -0.035 * Scale ),
+        new BABYLON.Vector2(-0.003 * Scale , -0.06 * Scale ),
+        new BABYLON.Vector2(-0.0045 * Scale , -0.06 * Scale ),
+        new BABYLON.Vector2(-0.0065 * Scale , -0.08 * Scale ),
+        new BABYLON.Vector2(0.036 * Scale , -0.085 * Scale ),
+    ];
+          
+    var Mugar_ = new BABYLON.PolygonMeshBuilder("Mugar_", Mugar_corners, scene);
+    var Mugar = Mugar_.build(null, 0.04 * Scale);
+    Mugar.material = material;
+    Mugar.position.y = 0.04 * Scale;
+    Mugar.position.x = 4;
+    Mugar.position.z = 4;
+
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 16 , height: 16 }, scene);
+
+    return scene;
+};
