@@ -78,14 +78,17 @@ var createScene = function () {
         windowInstance.position.y = 0;
         windowInstance.parent = RowOfWindows;
     }
+
+    var mehagianWall = new BABYLON.Mesh("mehagianWall", scene);
+    RowOfWindows.parent=mehagianWall;
     RowOfWindows.position.x=-8;
     for (var i = 1; i <= numberOfWindows; i++) {
         var windowRowInstance = RowOfWindows.clone("windowRowInstance" + i);
         windowRowInstance.position.y = i * 1.72;
-        windowInstance.parent = RowOfWindows;
+        windowRowInstance.parent = mehagianWall;
     }
-    
-    // var row2= RowOfWindows.clone("secondRow");
+    mehagianWall.rotation.y= Math.PI/2;
+    // var row2= RowOfWindows.clone("secondRow");   
     // row2.position.y=1.72;
     // var row3= RowOfWindows.clone("thirdRow");
     // row3.position.y=3.44;
