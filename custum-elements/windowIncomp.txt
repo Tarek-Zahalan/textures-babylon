@@ -43,8 +43,11 @@ var createScene = function () {
     var roof = poly_tri.build(null, 3.18);
     roof.position.x  =  1.59;
     roof.position.y  =  1.475;
-    roof.rotation.x  =  4.7;
-    roof.rotation.y  =  80.1;
+    // roof.rotation.x  =  4.7;
+    roof.rotation.x  =  1.5 * Math.PI ;
+    // roof.rotation.y  =  80.1;
+    roof.rotation.y = 1.5 * Math.PI; // 90 degrees in radians
+
     roof.material= Roofmaterial;
     
     var windowColumnLeft = BABYLON.MeshBuilder.CreateBox("windowColumnLeft", { width: 0.4, height: 1.55 , depth:0.25}, scene);
