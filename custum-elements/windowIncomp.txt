@@ -44,9 +44,9 @@ var createScene = function () {
     roof.position.x  =  1.59;
     roof.position.y  =  1.475;
     // roof.rotation.x  =  4.7;
-    roof.rotation.x  =  1.5 * Math.PI ;
+    roof.rotation.x  =  -0.5 * Math.PI ;
     // roof.rotation.y  =  80.1;
-    roof.rotation.y = 1.5 * Math.PI; // 90 degrees in radians
+    roof.rotation.y = -0.5 * Math.PI;
 
     roof.material= Roofmaterial;
     
@@ -59,6 +59,14 @@ var createScene = function () {
     windowColumnRight.position.y=0.775;
     windowColumnRight.position.x=-1.39;
     windowColumnRight.position.z=0.125;
+
+	var windowComponent = new BABYLON.Mesh("windowComponent", scene);
+        wall.parent= windowComponent;
+        window.parent= windowComponent;
+        windowColumnLeft.parent= windowComponent;
+        windowColumnRight.parent= windowComponent;
+        roof.parent= windowComponent;
+	windowComponent.position.y = 1;
 
     var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 16, height: 16}, scene);
 
