@@ -1,0 +1,95 @@
+var createScene = function () {
+    var scene = new BABYLON.Scene(engine);
+
+    var camera = new BABYLON.ArcRotateCamera("camera", 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
+    camera.setPosition(new BABYLON.Vector3(0, 0, 10));
+    // This attaches the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+    
+    //materials
+    var windowTexture = new BABYLON.Texture("https://raw.githubusercontent.com/Tarek-Zahalan/textures-babylon/master/textures/windowNew.jpg", scene);
+    var WindowMaterial = new BABYLON.StandardMaterial("wallMaterial", scene);
+    WindowMaterial.diffuseTexture = windowTexture;
+    WindowMaterial.emissiveColor = new BABYLON.Color3(1.5, 1.5, 1.5);
+    
+    var Wallcolor = new BABYLON.Color3(223 / 255, 208 / 255, 189 / 255); // Convert RGB values to the range [0, 1]
+    var Wallmaterial = new BABYLON.StandardMaterial("wallColor", scene);
+    Wallmaterial.diffuseColor = Wallcolor;
+
+    var Roofcolor = new BABYLON.Color3(191 / 255, 107 / 255, 74 / 255); 
+    var Roofmaterial = new BABYLON.StandardMaterial("materialName", scene);
+    Roofmaterial.diffuseColor = Roofcolor;
+
+    var window = BABYLON.MeshBuilder.CreateBox("wall", { width: 2.38, height: 1.25 , depth:0.01}, scene);
+    window.position.y= 0.925;
+    window.material = WindowMaterial;
+
+    var wall = BABYLON.MeshBuilder.CreateBox("wall", { width: 2.38, height: 0.3 , depth:0.01}, scene);
+    wall.material = Wallmaterial;
+    wall.position.y= 0.15;
+
+    var triangleVertices = [
+    new BABYLON.Vector3(0, 0, 0),  // Vertex A
+    new BABYLON.Vector3(0.5, 0, 0),  // Vertex B
+    new BABYLON.Vector3(0, 0.25, 0)   // Vertex C
+    ];
+    var poly_tri = new BABYLON.PolygonMeshBuilder("polytri", triangleVertices, scene);
+    var roof = poly_tri.build(null, 3.18);
+    roof.position.x  =  1.59;
+    roof.position.y  =  1.475;
+    // roof.rotation.x  =  4.7;
+    roof.rotation.x  =  -0.5 * Math.PI ;
+    // roof.rotation.y  =  80.1;
+    roof.rotation.y = -0.5 * Math.PI;
+
+    roof.material= Roofmaterial;
+    
+    var windowColumnLeft = BABYLON.MeshBuilder.CreateBox("windowColumnLeft", { width: 0.4, height: 1.55 , depth:0.25}, scene);
+    windowColumnLeft.position.y=0.775;
+    windowColumnLeft.position.x=1.39;
+    windowColumnLeft.position.z=0.125;
+
+    var windowColumnRight = BABYLON.MeshBuilder.CreateBox("windowColumnLeft", { width: 0.4, height: 1.55 , depth:0.25}, scene);
+    windowColumnRight.position.y=0.775;
+    windowColumnRight.position.x=-1.39;
+    windowColumnRight.position.z=0.125;
+
+	var windowComponent = new BABYLON.Mesh("windowComponent", scene);
+        wall.parent= windowComponent;
+        window.parent= windowComponent;
+        windowColumnLeft.parent= windowComponent;
+        windowColumnRight.parent= windowComponent;
+        roof.parent= windowComponent;
+
+	// windowComponent.position.y=1;
+    // windowComponent.scaling = new BABYLON.Vector3(0.2, 0.2, 0.2);
+
+    // var RowWall = BABYLON.MeshBuilder.CreateBox("wall", { width: 11.52, height: 1.8 , depth:0.01}, scene);
+    // RowWall.material = Wallmaterial;
+    // RowWall.position.y= 0.9;
+    // RowWall.position.z= -0.01;
+    var numberOfWindows = 4; // Change this value to control the number of windows.
+    var windowSize = 0.4;
+    //var spacing = (RowWall.scaling.x - windowSize) / (numberOfWindows + 1);
+
+    var RowOfWindows = new BABYLON.Mesh("windowComponent", scene);
+    for (var i = 1; i <= numberOfWindows; i++) {
+        var windowInstance = windowComponent.clone("windowInstance" + i);
+        // windowInstance.position.x = -6.9 - (RowWall.scaling.x / 2) + i * 2.88;
+        windowInstance.position.x=i * 2.88;
+        windowInstance.position.y = 0;
+        windowInstance.parent = RowOfWindows;
+    }
+    RowOfWindows.position.x=-8;
+    windowComponent.scaling = new BABYLON.Vector3(0, 0, 0);
+    var ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 16, height: 16}, scene);
+
+
+    return scene;
+};
