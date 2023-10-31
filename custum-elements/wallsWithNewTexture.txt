@@ -31,6 +31,12 @@ var createScene = function () {
     roofTexture.uScale = 2;
     var Roofmaterial = new BABYLON.StandardMaterial("roofMaterial", scene);
     Roofmaterial.diffuseTexture = roofTexture;
+
+    var columnTexture = new BABYLON.Texture("https://raw.githubusercontent.com/Tarek-Zahalan/textures-babylon/master/assets/column.jpeg", scene);
+    columnTexture.vScale = 5;
+    // columnTexture.uScale = 2;
+    var ColumnMaterial = new BABYLON.StandardMaterial("columnMaterial", scene);
+    ColumnMaterial.diffuseTexture = columnTexture;
     
 
     var window = BABYLON.MeshBuilder.CreateBox("wall", { width: 2.38, height: 1.25 , depth:0.01}, scene);
@@ -61,11 +67,13 @@ var createScene = function () {
     windowColumnLeft.position.y=0.65;
     windowColumnLeft.position.x=1.39;
     windowColumnLeft.position.z=0.125;
+    windowColumnLeft.material = ColumnMaterial;
 
     var windowColumnRight = BABYLON.MeshBuilder.CreateBox("windowColumnRight", { width: 0.4, height: 1.65 , depth:0.25}, scene);
     windowColumnRight.position.y=0.65;
     windowColumnRight.position.x=-1.39;
     windowColumnRight.position.z=0.125;
+    windowColumnRight.material= ColumnMaterial;
 
 	var windowComponent = new BABYLON.Mesh("windowComponent", scene);
         wall.parent= windowComponent;
